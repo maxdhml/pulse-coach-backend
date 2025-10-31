@@ -11,11 +11,12 @@ app.get("/", (req, res) => {
   res.send("Pulse Coach Backend is running ✅");
 });
 
-app.get("/auth/strava", async (req, res) => {
+app.get("/auth/strava", (req, res) => {
   res.redirect(
     `https://www.strava.com/oauth/authorize?client_id=${process.env.STRAVA_CLIENT_ID}&response_type=code&redirect_uri=https://pulse-coach-backend.onrender.com/exchange_token&approval_prompt=force&scope=read,activity:read_all`
   );
 });
+
 
 app.get("/exchange_token", async (req, res) => {
   const { code } = req.query;
