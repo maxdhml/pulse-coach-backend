@@ -27,11 +27,15 @@ app.get("/exchange_token", async (req, res) => {
       code,
       grant_type: "authorization_code",
     });
-    res.json(response.data);
+
+    const token = response.data.access_token;
+    // Redirige vers ton app Expo
+    res.redirect(`exp://localhost:8081?token=${token}`);
   } catch (err) {
     res.status(500).json({ error: "Erreur lors de l’échange de token" });
   }
 });
+
 
 app.listen(port, () => console.log(`🚀 Serveur lancé sur le port ${port}`));
 
