@@ -34,3 +34,6 @@ app.get("/exchange_token", async (req, res) => {
 });
 
 app.listen(port, () => console.log(`🚀 Serveur lancé sur le port ${port}`));
+
+console.log("CLIENT_ID =", process.env.STRAVA_CLIENT_ID);
+
