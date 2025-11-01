@@ -1,3 +1,12 @@
+// Dépendances
+const express = require('express');
+const app = express();
+
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Route 1: Initiation OAuth
 app.get('/auth/strava', async (req, res) => {
   try {
     const redirectUri = req.query.redirect_uri || 'vyve://auth';
@@ -15,8 +24,9 @@ app.get('/auth/strava', async (req, res) => {
     console.error('Erreur lors de l\'initiation OAuth:', error);
     res.status(500).json({ error: "Erreur lors de l'authentification Strava" });
   }
-});
+}); // ← IMPORTANT: Point-virgule et accolade fermante
 
+// Route 2: Callback OAuth
 app.get('/auth/strava/callback', async (req, res) => {
   try {
     const { code, state } = req.query;
@@ -27,7 +37,6 @@ app.get('/auth/strava/callback', async (req, res) => {
     
     const appRedirectUri = state || 'vyve://auth';
     
-    // Vérifier les variables d'environnement
     if (!process.env.STRAVA_CLIENT_ID || !process.env.STRAVA_CLIENT_SECRET) {
       return res.status(500).json({ error: "Configuration serveur incomplète" });
     }
@@ -58,16 +67,14 @@ app.get('/auth/strava/callback', async (req, res) => {
     const accessToken = tokenData.access_token;
     const appUrl = `${appRedirectUri}?token=${encodeURIComponent(accessToken)}`;
     
-    // Toujours utiliser la page HTML (fonctionne partout)
     res.send(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirection vers Vyve</title>
+    <title>Redirection Vyve</title>
     <style>
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: -apple-system, sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -91,7 +98,6 @@ app.get('/auth/strava/callback', async (req, res) => {
         100% { transform: rotate(360deg); }
       }
       a { color: #00B4D8; text-decoration: none; }
-      a:hover { text-decoration: underline; }
     </style>
   </head>
   <body>
@@ -100,8 +106,7 @@ app.get('/auth/strava/callback', async (req, res) => {
       <h2>Connexion réussie !</h2>
       <p>Redirection vers l'application Vyve...</p>
       <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 2rem;">
-        Si l'application ne s'ouvre pas automatiquement, 
-        <a href="${appUrl.replace(/"/g, '&quot;')}">cliquez ici</a>
+        <a href="${appUrl.replace(/"/g, '&quot;')}">Cliquez ici si la redirection ne fonctionne pas</a>
       </p>
     </div>
     <script>
@@ -125,6 +130,17 @@ app.get('/auth/strava/callback', async (req, res) => {
     console.error('Erreur lors de l\'échange de token:', err);
     res.status(500).json({ error: "Erreur lors de l'échange de token" });
   }
+}); // ← IMPORTANT: Point-virgule et accolade fermante
+
+// Route de santé
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Démarrage du serveur
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
     
   } catch (err) {
