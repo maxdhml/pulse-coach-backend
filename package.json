@@ -1,7 +1,7 @@
 {
-  "name": "pulse-coach-backend",
+  "name": "vyve-backend",
   "version": "1.0.0",
-  "description": "Backend Pulse Coach - gestion multi-utilisateurs Strava",
+  "description": "Backend Vyve - gestion multi-utilisateurs Strava",
   "main": "index.js",
   "type": "module",
   "scripts": {
