@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 10000;
 
 app.get("/", (req, res) => {
-  res.send("Pulse Coach Backend is running ✅");
+  res.send("Vyve Backend is running ✅");
 });
 
 app.get("/auth/strava", (req, res) => {
@@ -30,7 +30,7 @@ app.get("/exchange_token", async (req, res) => {
 
     const token = response.data.access_token;
     // Redirige vers ton app Expo
-    res.redirect(`exp://localhost:8081?token=${token}`);
+    res.redirect(`vyve://auth?token=${token}`);
   } catch (err) {
     res.status(500).json({ error: "Erreur lors de l’échange de token" });
   }
