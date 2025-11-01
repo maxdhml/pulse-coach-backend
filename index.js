@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 app.get("/auth/strava", (req, res) => {
   res.redirect(
-    `https://www.strava.com/oauth/authorize?client_id=${process.env.STRAVA_CLIENT_ID}&response_type=code&redirect_uri=https://pulse-coach-backend.onrender.com/exchange_token&approval_prompt=force&scope=read,activity:read_all`
+    `https://www.strava.com/oauth/authorize?client_id=${process.env.STRAVA_CLIENT_ID}&response_type=code&redirect_uri=https://vyve-backend.onrender.com/exchange_token&approval_prompt=force&scope=read,activity:read_all`
   );
 });
 
